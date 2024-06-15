@@ -7,6 +7,7 @@ use axum::Json;
 use std::sync::Arc;
 use serde_json::json;
 use uuid::Uuid;
+use tracing::debug;
 
 pub async fn mw_reponse_map(
 	ctx: Option<Ctx>,
@@ -14,8 +15,9 @@ pub async fn mw_reponse_map(
 	req_method: Method,
 	res: Response,
 ) -> Response {
-	println!("->> {:<12} - mw_reponse_map", "RES_MAPPER");
-	let uuid = Uuid::new_v4();
+//	println!("->> {:<12} - mw_reponse_map", "RES_MAPPER");
+       	debug!("{:<12} - mw_reponse_map", "RES_MAPPER");
+        let uuid = Uuid::new_v4();
 
 	// -- Get the eventual response error.
 	let web_error = res.extensions().get::<Arc<web::Error>>();
@@ -33,7 +35,8 @@ pub async fn mw_reponse_map(
 					}
 				});
 
-				println!("->> CLIENT ERROR BODY:\n{client_error_body}");
+				debug!("CLIENT ERROR BODY:\n{client_error_body}");
+				//println!("->> CLIENT ERROR BODY:\n{client_error_body}");
 
 				// Build the new response from the client_error_body
 				(*status_code, Json(client_error_body)).into_response()
@@ -44,7 +47,8 @@ pub async fn mw_reponse_map(
 	// TODO: Need to hander if log_request fail (but should not fail request)
 	let _ = log_request(uuid, req_method, uri, ctx, web_error.map(Arc::as_ref), client_error).await;
 
-	println!("\n");
+	debug!("\n");
+	//println!("\n");
 
 	error_response.unwrap_or(res)
 }

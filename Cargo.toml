@@ -20,6 +20,11 @@ serde_with = "3"
 axum = "0.7"
 tower-http = { version = "0.5", features = ["fs"] }
 tower-cookies = "0.10"
+# -- Tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+# -- Data
+sqlx = { version = "0.6", features = ["runtime-tokio-rustls","postgres","uuid","time"]}
 # -- Others
 uuid = {version = "1", features = ["v4","fast-rng",]}
 lazy-regex = "3"
@@ -30,3 +35,4 @@ strum_macros = "0.26"
 [dev-dependencies]
 anyhow = "1"
 httpc-test = "0.1.1"
+serial_test="2"
